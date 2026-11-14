@@ -75,12 +75,14 @@ function closeLetterModal(e) {
 // 5. RULETA DE CITAS
 // =========================================
 const options = [
-  "Ir por cafecito ☕",
-  "Noche de pelis 🎬",
-  "Cenar tacos 🌮",
-  "Ir por nieve 🍦",
-  "Cita sorpresa ✨",
-  "Armar un picnic 🧺"
+  "Ir por cafecitoo",
+  "Noche de pelisss o cine",
+  "Cenar taquitosss ",
+  "Ir por nievecita ",
+  "Hamburguesas ",
+  "Armar un picnic",
+ "Ir a un parqueo o plaza",
+ "Ir por Chetosss",
 ];
 const colors = ["#ff5e94", "#9b5de5", "#f15bb5", "#ff8fab", "#7b2cbf", "#ff758c"];
 let currentAngle = 0;
@@ -212,11 +214,11 @@ function startHeartGame() {
 // =========================================
 // 7. CARTA FINAL CON EFECTO MÁQUINA DE ESCRIBIR
 // =========================================
-const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí.
+const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí dianitaaa ademas porque soy de sistemas jsjs.
 
-Cada momento contigo —desde las pláticas largas hasta nuestras salidas a comer— se ha vuelto de mis partes favoritas de la semana. Admiro muchísimo tu forma de ser, tu alegría y lo linda persona que eres.
+Queria decirte que cada momento contigo —desde las pláticas largas hasta nuestras salidas a comer muy improvisadas— se ha vuelto de mis partes favoritas de la semana y sobre todo, del semestre. Admiro muchísimo tu forma de ser, tu alegría y lo linda persona que eres, Dianita.
 
-Espero que hoy la pases increíble, que te consientan mucho y que este nuevo año esté lleno de cosas bonitas para ti.
+Espero que hoy la pases increíble, que te consientan mucho y que este nuevo año esté lleno de cosas bonitas para ti, tambien para nosotros.
 
 ¡Feliz cumpleaños, Dianita! 💖`;
 
