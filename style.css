@@ -1,0 +1,596 @@
+:root {
+  --bg-dark: #120b18;
+  --card-bg: rgba(255, 255, 255, 0.07);
+  --card-border: rgba(255, 182, 213, 0.25);
+  --pink: #ff6b9d;
+  --pink-light: #ffb8d1;
+  --gold: #ffd166;
+  --text-main: #fff5f8;
+  --text-muted: #d4b8c7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Fondo luminoso ambiental */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 107, 157, 0.22), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.2), transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 209, 102, 0.08), transparent 60%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+#floating-hearts {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg-heart {
+  position: absolute;
+  bottom: -30px;
+  color: rgba(255, 118, 168, 0.35);
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* =========================================
+   PANTALLA DE BIENVENIDA CON CORAZÓN BRILLANTE
+========================================= */
+.screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.welcome-card {
+  max-width: 420px;
+  width: 100%;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  padding: 40px 26px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 40px rgba(255, 107, 157, 0.15);
+}
+
+.heart-container {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.heart-svg {
+  width: 84px;
+  height: 84px;
+  filter: drop-shadow(0 0 18px rgba(255, 107, 157, 0.9));
+  animation: heartbeat 1.4s infinite ease-in-out;
+  z-index: 2;
+}
+
+.heart-pulse {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 118, 168, 0.55), transparent 70%);
+  animation: glowPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.14); }
+  45% { transform: scale(0.98); }
+  65% { transform: scale(1.1); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.55); opacity: 1; }
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: rgba(255, 209, 102, 0.15);
+  border: 1px solid rgba(255, 209, 102, 0.4);
+  color: var(--gold);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+.welcome-card h1 {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #fff 20%, #ffb8d1 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome-card p {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.5;
+  margin-bottom: 26px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #ff5e94, #ff8fab);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 99px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 94, 148, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.96);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================================
+   APP PRINCIPAL Y MENÚ
+========================================= */
+#main-app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px 18px 60px;
+  animation: fadeIn 0.7s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  margin-bottom: 22px;
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+}
+
+.brand-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--pink-light);
+}
+
+.btn-back, .btn-confetti {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.hero-banner {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.hero-banner h2 {
+  font-size: 1.75rem;
+  margin-bottom: 6px;
+}
+
+.hero-banner p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.menu-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 22px;
+  padding: 20px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.menu-card:hover, .menu-card:active {
+  transform: translateY(-4px);
+  border-color: var(--pink);
+  background: rgba(255, 107, 157, 0.14);
+}
+
+.highlight-card {
+  border-color: rgba(255, 209, 102, 0.45);
+  background: linear-gradient(145deg, rgba(255, 107, 157, 0.14), rgba(255, 209, 102, 0.1));
+}
+
+.card-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.menu-card h3 {
+  font-size: 1.08rem;
+  margin-bottom: 6px;
+}
+
+.menu-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Vistas internas */
+.view {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.view.active-view {
+  display: block;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-bottom: 4px;
+}
+
+.section-sub {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 22px;
+}
+
+/* Momentos (Polaroid Flip) */
+.polaroid-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.polaroid {
+  perspective: 1000px;
+  height: 330px;
+  cursor: pointer;
+}
+
+.polaroid-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.polaroid.flipped .polaroid-inner {
+  transform: rotateY(180deg);
+}
+
+.polaroid-front, .polaroid-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  padding: 14px;
+  background: #fff8fa;
+  color: #2b1924;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.polaroid-back {
+  transform: rotateY(180deg);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #ffe3ec, #fff0f5);
+}
+
+.polaroid-front img, .video-card video {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.media-placeholder {
+  width: 100%;
+  height: 230px;
+  border-radius: 14px;
+  background: rgba(255, 107, 157, 0.15);
+  border: 2px dashed rgba(255, 107, 157, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--pink);
+  font-weight: 600;
+  text-align: center;
+}
+
+.media-placeholder.small {
+  height: 150px;
+}
+
+.caption {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+.video-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.video-card h4 {
+  margin-bottom: 10px;
+}
+
+/* Comiditas */
+.food-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.food-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 14px;
+}
+
+.food-badge {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  background: rgba(18, 11, 24, 0.85);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.food-info {
+  margin-top: 12px;
+}
+
+.food-info p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+/* Sobres */
+.envelopes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.envelope {
+  background: linear-gradient(145deg, rgba(255, 107, 157, 0.16), rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.envelope:active {
+  transform: scale(0.96);
+}
+
+.env-icon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Ruleta y Juego */
+#sec-ruleta, #sec-juego {
+  text-align: center;
+}
+
+.wheel-wrapper {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto 20px;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.8rem;
+  color: var(--gold);
+  z-index: 5;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+#wheel-canvas {
+  border-radius: 50%;
+  border: 4px solid var(--pink-light);
+  box-shadow: 0 0 30px rgba(255, 107, 157, 0.35);
+}
+
+.result-box {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 209, 102, 0.15);
+  border: 1px solid var(--gold);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 320px;
+  margin: 0 auto 10px;
+}
+
+.btn-small {
+  background: var(--pink);
+  color: #fff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#game-canvas {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  display: block;
+  margin: 0 auto;
+  touch-action: none;
+}
+
+/* Carta Final */
+.letter-paper {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 28px 22px;
+  line-height: 1.75;
+}
+
+.letter-paper h2 {
+  color: var(--pink-light);
+  margin-bottom: 16px;
+}
+
+#typewriter-text {
+  white-space: pre-line;
+  font-size: 0.96rem;
+  color: var(--text-main);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 5, 15, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 400px;
+  width: 100%;
+  background: #1f1229;
+  border: 1px solid var(--pink);
+  border-radius: 24px;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.modal-content h3 {
+  color: var(--pink-light);
+  margin-bottom: 12px;
+}
+
+.modal-content p {
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.close-modal {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
