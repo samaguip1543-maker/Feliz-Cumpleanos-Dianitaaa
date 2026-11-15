@@ -58,51 +58,234 @@ Snd.ui();
 document.addEventListener('click', e => { if (e.target.closest('.polaroid')) Snd.paper(); });
 
 // =========================================
-// 1. VÓRTICE DE CORAZÓN (canvas)
+// 1. CORAZÓN ASCII 3D DE NUBE DENSA + ESPIRALES DE LUZ
 // =========================================
-const VX = (() => {
-  const c = $('#vortex-canvas'), x = c.getContext('2d');
-  const N = reduce ? 60 : mobile ? 130 : 260;
-  let W, H, cx, cy, ox = 0, oy = 0, mx = null, my = null, P = [], run = false, burst = 0, raf;
-  function size() {
-    const d = Math.min(devicePixelRatio || 1, 2);
-    W = c.clientWidth; H = c.clientHeight; c.width = W * d; c.height = H * d; x.setTransform(d, 0, 0, d, 0, 0);
-    const b = $('#magic-heart').getBoundingClientRect(), o = c.getBoundingClientRect();
-    cx = b.left + b.width / 2 - o.left; cy = b.top + b.height / 2 - o.top;
+const ASCIIHeart = (() => {
+  const canvas = $('#ascii-canvas');
+  const ctx = canvas.getContext('2d');
+  const hudRot = $('#hud-rot');
+
+  const BODY_CHARS = ['.', ':', '+', '*', 'v', 'x', '%', '&', '#', 'W'];
+  const LIGHT_CHARS = ['@', '#', '*', '+'];
+  const BASE_SPEED = 0.0055;
+
+  let W, H, rotY = 0, velY = BASE_SPEED, dragX = null, run = false, raf;
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
-  const maxR = () => Math.min(Math.max(W, H) * .6, 520);
-  const mk = far => ({ a: Math.random() * 6.283, r: far ? maxR() : 20 + Math.random() * maxR(), s: .006 + Math.random() * .014, h: 325 + Math.random() * 45, z: .4 + Math.random() * 1.2, px: null, py: null });
-  function frame() {
-    if (!run) return;
-    x.globalCompositeOperation = 'source-over'; x.fillStyle = 'rgba(18,11,24,.2)'; x.fillRect(0, 0, W, H);
-    x.globalCompositeOperation = 'lighter';
-    if (mx !== null) { ox += ((mx - cx) * .25 - ox) * .06; oy += ((my - cy) * .25 - oy) * .06; }
-    const R = maxR();
-    for (const p of P) {
-      p.a += p.s * (1 + (1 - p.r / R) * 2.5) * (1 + burst * 3);
-      p.r -= (.18 + (1 - p.r / R) * .5) * (1 + burst * 5);
-      if (p.r < 14) Object.assign(p, mk(true), { px: null });
-      const k = p.r / R, X = cx + ox * (1 - k) + Math.cos(p.a) * p.r, Y = cy + oy * (1 - k) + Math.sin(p.a) * p.r * .55;
-      if (p.px !== null) {
-        x.strokeStyle = `hsla(${p.h},100%,${65 + (1 - k) * 25}%,${.25 + (1 - k) * .6})`;
-        x.lineWidth = p.z * (.6 + (1 - k) * 1.8); x.beginPath(); x.moveTo(p.px, p.py); x.lineTo(X, Y); x.stroke();
-      }
-      p.px = X; p.py = Y;
+
+  // Nube densa volumétrica de corazón 3D
+  const particles = [];
+  const TARGET_COUNT = reduce ? 650 : mobile ? 1500 : 2600;
+
+  let attempts = 0;
+  while (particles.length < TARGET_COUNT && attempts < 120000) {
+    attempts++;
+    const x = (Math.random() * 2.6) - 1.3;
+    const y = (Math.random() * 2.6) - 1.2;
+    const z = (Math.random() * 1.8) - 0.9;
+
+    const a = x * x + 2.25 * z * z + y * y - 1;
+    const val = a * a * a - (x * x * y * y * y) - (0.1125 * z * z * y * y * y);
+
+    if (val <= 0 && val > -0.22) {
+      const len = Math.hypot(x, y, z * 1.5) || 1;
+      particles.push({
+        x: x,
+        y: -y,
+        z: z,
+        nx: x / len,
+        ny: -y / len,
+        nz: (z * 1.5) / len,
+        ch: BODY_CHARS[Math.floor(Math.random() * BODY_CHARS.length)],
+        isRibbon: false,
+        phase: Math.random() * 6.28
+      });
     }
-    burst *= .93;
-    raf = requestAnimationFrame(frame);
   }
-  const mv = e => { const o = c.getBoundingClientRect(); mx = e.clientX - o.left; my = e.clientY - o.top; };
+
+  // Espirales luminosas alrededor del corazón
+  const RIBBON_COUNT = reduce ? 100 : mobile ? 220 : 380;
+  for (let i = 0; i < RIBBON_COUNT; i++) {
+    const t = i / RIBBON_COUNT;
+    const y = -1.05 + t * 2.15;
+    const angle = t * Math.PI * 7;
+
+    const profile = Math.sin(Math.min(1, Math.max(0, (y + 1.05) / 2.1)) * Math.PI);
+    const rx = (0.35 + profile * 0.88) * 1.04;
+    const rz = (0.22 + profile * 0.48) * 1.04;
+
+    const jitter = () => (Math.random() - 0.5) * 0.05;
+    const x = Math.cos(angle) * rx + jitter();
+    const z = Math.sin(angle) * rz + jitter();
+
+    particles.push({
+      x: x,
+      y: -y,
+      z: z,
+      nx: Math.cos(angle),
+      ny: 0,
+      nz: Math.sin(angle),
+      ch: LIGHT_CHARS[i % LIGHT_CHARS.length],
+      isRibbon: true,
+      phase: t * 18
+    });
+  }
+
+  // Partículas y estrellas en el fondo
+  const stars = Array.from({ length: reduce ? 45 : mobile ? 110 : 200 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    speed: 0.00035 + Math.random() * 0.0009,
+    drift: (Math.random() - 0.5) * 0.0003,
+    ch: Math.random() > 0.7 ? '✦' : (Math.random() > 0.4 ? '+' : '·'),
+    alpha: 0.2 + Math.random() * 0.55,
+    phase: Math.random() * 6.28,
+    tint: Math.random() > 0.5 ? '255, 195, 225' : '225, 195, 255'
+  }));
+
+  function render(time) {
+    if (!run) return;
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W * 0.5;
+    const cy = H * (mobile ? 0.43 : 0.45);
+    const beat = 1 + Math.sin(time * 0.0032) * 0.028;
+    const baseSize = Math.min(W, H) * (mobile ? 0.32 : 0.30) * beat;
+
+    // Resplandor radial suave detrás del corazón
+    const glow = ctx.createRadialGradient(cx, cy, baseSize * 0.1, cx, cy, baseSize * 1.45);
+    glow.addColorStop(0, 'rgba(255, 77, 148, 0.24)');
+    glow.addColorStop(0.55, 'rgba(168, 85, 247, 0.10)');
+    glow.addColorStop(1, 'rgba(10, 3, 16, 0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseSize * 1.45, 0, Math.PI * 2);
+    ctx.fill();
+
+    const fontSize = mobile ? 9.5 : 11.5;
+    ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Estrellas y destellos flotando en el fondo
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      s.y += s.speed;
+      s.x += s.drift;
+      if (s.y > 1) { s.y = -0.02; s.x = Math.random(); }
+      if (s.x < 0) s.x = 1;
+      if (s.x > 1) s.x = 0;
+
+      const twinkle = 0.65 + 0.35 * Math.sin(time * 0.0025 + s.phase);
+      ctx.fillStyle = `rgba(${s.tint}, ${s.alpha * twinkle})`;
+      ctx.fillText(s.ch, s.x * W, s.y * H);
+    }
+
+    // Rotación lenta y fluida
+    rotY += velY;
+    velY += (BASE_SPEED - velY) * 0.035;
+    if (hudRot) {
+      const deg = Math.round(((rotY * 180) / Math.PI) % 360);
+      hudRot.textContent = `rot: ${(deg + 360) % 360}°`;
+    }
+
+    const cosY = Math.cos(rotY);
+    const sinY = Math.sin(rotY);
+
+    // Proyectar todos los puntos 3D
+    const projected = new Array(particles.length);
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const rx = p.x * cosY - p.z * sinY;
+      const rz = p.x * sinY + p.z * cosY;
+
+      const rnx = p.nx * cosY - p.nz * sinY;
+      const rnz = p.nx * sinY + p.nz * cosY;
+
+      const fov = 3.2;
+      const persp = fov / (fov - rz);
+
+      projected[i] = {
+        sx: cx + rx * baseSize * persp,
+        sy: cy + p.y * baseSize * persp,
+        z: rz,
+        light: rnx * 0.25 - p.ny * 0.25 + rnz * 0.9,
+        ch: p.ch,
+        isRibbon: p.isRibbon,
+        phase: p.phase
+      };
+    }
+
+    projected.sort((a, b) => a.z - b.z);
+
+    // Dibujar caracteres del corazón
+    for (let i = 0; i < projected.length; i++) {
+      const pt = projected[i];
+      const depth = Math.max(0.18, Math.min(1, (pt.z + 1.1) / 2.2));
+
+      if (pt.isRibbon) {
+        const twinkle = 0.6 + 0.4 * Math.sin(time * 0.005 + pt.phase);
+        ctx.fillStyle = `rgba(255, 224, 130, ${depth * twinkle})`;
+        ctx.fillText(pt.ch, pt.sx, pt.sy);
+      } else {
+        if (pt.light > 0.58) {
+          ctx.fillStyle = `rgba(255, 218, 235, ${0.5 + depth * 0.5})`;
+        } else if (pt.light > 0.1) {
+          ctx.fillStyle = `rgba(255, 82, 152, ${0.4 + depth * 0.58})`;
+        } else {
+          ctx.fillStyle = `rgba(155, 36, 98, ${0.28 + depth * 0.45})`;
+        }
+        ctx.fillText(pt.ch, pt.sx, pt.sy);
+      }
+    }
+
+    raf = requestAnimationFrame(render);
+  }
+
+  const onDown = e => {
+    dragX = e.clientX;
+    velY = 0.022;
+    Snd.init();
+    Snd.chime();
+  };
+  const onMove = e => {
+    if (dragX !== null) {
+      const dx = e.clientX - dragX;
+      rotY += dx * 0.007;
+      velY = dx * 0.002;
+      dragX = e.clientX;
+    }
+  };
+  const onUp = () => { dragX = null; };
+
   return {
     start() {
-      size(); P = Array.from({ length: N }, () => mk(false)); run = true; frame();
-      addEventListener('resize', size); addEventListener('pointermove', mv);
-      addEventListener('pointerdown', e => { mv(e); burst = 1; });
+      resize();
+      run = true;
+      raf = requestAnimationFrame(render);
+      window.addEventListener('resize', resize);
+      canvas.addEventListener('pointerdown', onDown);
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp);
     },
-    stop() { run = false; cancelAnimationFrame(raf); removeEventListener('resize', size); removeEventListener('pointermove', mv); }
+    stop() {
+      run = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', resize);
+      canvas.removeEventListener('pointerdown', onDown);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    }
   };
 })();
-VX.start();
+ASCIIHeart.start();
 
 // =========================================
 // 2. CORAZONES FLOTANTES Y CONFETI
@@ -130,7 +313,9 @@ function enterGift() {
   Snd.init(); Snd.heart(); launchConfetti();
   const welcome = $('#welcome-screen'), app = $('#main-app');
   const done = () => {
-    welcome.classList.add('hidden'); VX.stop(); app.classList.remove('hidden');
+    welcome.classList.add('hidden');
+    ASCIIHeart.stop();
+    app.classList.remove('hidden');
     if (G && !reduce) {
       G.from('.top-bar', { y: -40, opacity: 0, duration: .6, ease: 'power3.out' });
       G.from('.hero-banner > *', { y: 20, opacity: 0, stagger: .1, duration: .6, ease: 'power3.out' });

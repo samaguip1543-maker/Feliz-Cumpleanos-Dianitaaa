@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>¡Feliz Cumpleaños Dianita! ✨</title>
-  <!-- Fuentes elegantes -->
+  <!-- Fuentes elegantes y tipografía monospace para el corazón ASCII -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Librerías de animación y confeti -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -15,34 +15,26 @@
 </head>
 <body>
 
-  <!-- FONDO DE PARTÍCULAS / DESTELLOS -->
+  <!-- FONDO DE PARTÍCULAS / DESTELLOS (para el menú y vistas internas) -->
   <div class="bg-glow"></div>
   <div id="floating-hearts"></div>
 
   <!-- =========================================================
-       PANTALLA 1: BIENVENIDA CON CORAZÓN BRILLANTE
+       PANTALLA 1: BIENVENIDA CON CORAZÓN ASCII 3D
   ========================================================== -->
   <section id="welcome-screen" class="screen active">
-    <canvas id="vortex-canvas"></canvas>
-    <div class="welcome-card">
-      <div class="heart-container" id="magic-heart" onclick="enterGift()">
-        <div class="heart-pulse"></div>
-        <svg class="heart-svg" viewBox="0 0 32 29.6">
-          <defs>
-            <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#ff758c" />
-              <stop offset="50%" stop-color="#ff7eb3" />
-              <stop offset="100%" stop-color="#ffd1ff" />
-            </linearGradient>
-          </defs>
-          <path fill="url(#heartGrad)" d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-          c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-        </svg>
-      </div>
-      <span class="badge">Hoy es un día muy especial</span>
+    <div class="nebula-bg"></div>
+    <canvas id="ascii-canvas"></canvas>
+
+    <div class="terminal-hud">
+      <span>dianita_heart.py</span>
+      <span id="hud-rot">rot: 0°</span>
+    </div>
+
+    <div class="bottom-cta">
       <h1>¡Feliz Cumpleaños, Dianita!</h1>
-      <p>Preparé este pequeño rincón solo para ti. Toca el corazón brillante para abrir tu regalo ✨</p>
-      <button class="btn-primary" onclick="enterGift()">Abrir mi regalo 💖</button>
+      <p>Hecho línea por línea para ti. Desliza para girarlo ✨</p>
+      <button class="btn-enter" onclick="enterGift()">[ Abrir mi regalo 💖 ]</button>
     </div>
   </section>
 

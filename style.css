@@ -28,10 +28,9 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   position: relative;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-/* Fondo luminoso ambiental */
+/* Fondo luminoso ambiental (para el menú y vistas internas) */
 .bg-glow {
   position: fixed;
   inset: 0;
@@ -66,116 +65,118 @@ body {
 }
 
 /* =========================================
-   PANTALLA DE BIENVENIDA CON CORAZÓN BRILLANTE
+   PANTALLA 1: BIENVENIDA CON CORAZÓN ASCII 3D
 ========================================= */
-.screen {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  text-align: center;
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
 #welcome-screen {
   position: relative;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(circle at 50% 42%, #260d2e 0%, #14061b 52%, #0a0310 100%);
 }
 
-#vortex-canvas {
+.nebula-bg {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 77, 141, 0.22), transparent 45%),
+    radial-gradient(circle at 72% 38%, rgba(168, 85, 247, 0.24), transparent 48%),
+    radial-gradient(circle at 50% 75%, rgba(255, 209, 102, 0.12), transparent 50%);
+  filter: blur(36px);
+  animation: nebulaDrift 16s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaDrift {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-2%, 2%); }
+}
+
+#ascii-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 1;
+  cursor: grab;
   touch-action: none;
 }
 
-.welcome-card {
-  position: relative;
-  z-index: 1;
-  max-width: 420px;
-  width: 100%;
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  border-radius: 28px;
-  padding: 40px 26px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 40px rgba(255, 107, 157, 0.15);
+#ascii-canvas:active {
+  cursor: grabbing;
 }
 
-.heart-container {
+.terminal-hud {
   position: relative;
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.heart-svg {
-  width: 84px;
-  height: 84px;
-  filter: drop-shadow(0 0 18px rgba(255, 107, 157, 0.9));
-  animation: heartbeat 1.4s infinite ease-in-out;
   z-index: 2;
+  padding: calc(16px + env(safe-area-inset-top)) 20px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(255, 198, 220, 0.65);
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
 }
 
-.heart-pulse {
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 118, 168, 0.55), transparent 70%);
-  animation: glowPulse 1.4s infinite ease-in-out;
+.bottom-cta {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 24px 24px calc(38px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, rgba(10, 3, 16, 0.92) 32%, rgba(10, 3, 16, 0) 100%);
+  pointer-events: none;
 }
 
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.14); }
-  45% { transform: scale(0.98); }
-  65% { transform: scale(1.1); }
+.bottom-cta h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.75rem, 5vw, 2.3rem);
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #ffffff 25%, #ff9ec4 75%, #ffd166 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 24px rgba(255, 77, 141, 0.3);
 }
 
-@keyframes glowPulse {
-  0%, 100% { transform: scale(0.9); opacity: 0.6; }
-  50% { transform: scale(1.55); opacity: 1; }
+.bottom-cta p {
+  font-size: 0.88rem;
+  color: rgba(242, 220, 232, 0.82);
+  margin-bottom: 18px;
+  max-width: 360px;
+  margin-inline: auto;
 }
 
-.badge {
-  display: inline-block;
-  padding: 6px 14px;
+.btn-enter {
+  pointer-events: auto;
+  background: rgba(255, 77, 141, 0.22);
+  border: 1px solid rgba(255, 150, 195, 0.7);
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 13px 28px;
   border-radius: 99px;
-  background: rgba(255, 209, 102, 0.15);
-  border: 1px solid rgba(255, 209, 102, 0.4);
-  color: var(--gold);
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-bottom: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 28px rgba(255, 77, 141, 0.4), inset 0 0 12px rgba(255, 133, 179, 0.25);
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-enter:hover {
+  background: rgba(255, 77, 141, 0.36);
+  box-shadow: 0 0 38px rgba(255, 77, 141, 0.7);
+}
+
+.btn-enter:active {
+  transform: scale(0.95);
 }
 
 h1, h2, h3 {
   font-family: 'Playfair Display', serif;
-}
-
-.welcome-card h1 {
-  font-size: 2.1rem;
-  line-height: 1.2;
-  margin-bottom: 12px;
-  background: linear-gradient(135deg, #fff 20%, #ffb8d1 80%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.welcome-card p {
-  color: var(--text-muted);
-  font-size: 0.96rem;
-  line-height: 1.5;
-  margin-bottom: 26px;
 }
 
 .btn-primary {
@@ -204,12 +205,12 @@ h1, h2, h3 {
 }
 
 /* =========================================
-   APP PRINCIPAL Y MENÚ
+   PANTALLA 2: APP PRINCIPAL Y MENÚ
 ========================================= */
 #main-app {
   max-width: 520px;
   margin: 0 auto;
-  padding: 16px 18px 60px;
+  padding: calc(16px + env(safe-area-inset-top)) 18px calc(60px + env(safe-area-inset-bottom));
   animation: fadeIn 0.7s ease;
 }
 
@@ -225,6 +226,7 @@ h1, h2, h3 {
   padding: 10px 14px;
   background: var(--card-bg);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--card-border);
   border-radius: 18px;
   margin-bottom: 22px;
@@ -298,6 +300,7 @@ h1, h2, h3 {
 .menu-card {
   background: var(--card-bg);
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--card-border);
   border-radius: 22px;
   padding: 20px 14px;
@@ -615,6 +618,7 @@ h1, h2, h3 {
   inset: 0;
   background: rgba(10, 5, 15, 0.8);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
