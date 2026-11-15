@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>¡Feliz Cumpleaños Dianita! ✨</title>
   <!-- Fuentes elegantes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Librería ligera de Confeti -->
-   
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+   <style src="style.css"></style>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -24,7 +23,6 @@
        PANTALLA 1: BIENVENIDA CON CORAZÓN BRILLANTE
   ========================================================== -->
   <section id="welcome-screen" class="screen active">
-    <canvas id="vortex-canvas"></canvas>
     <div class="welcome-card">
       <div class="heart-container" id="magic-heart" onclick="enterGift()">
         <div class="heart-pulse"></div>
@@ -56,7 +54,7 @@
     <header class="top-bar">
       <button id="back-btn" class="btn-back hidden" onclick="showMenu()">← Menú</button>
       <span class="brand-title">Para Dianitaaaaa ✨</span>
-      <div class="top-actions"><button id="mute-btn" class="btn-confetti" onclick="Snd.toggle()" aria-label="Silenciar o activar sonido">🔊</button><button class="btn-confetti" onclick="launchConfetti()" title="Más confeti">🎉</button></div>
+      <button class="btn-confetti" onclick="launchConfetti()" title="Más confeti">🎉</button>
     </header>
 
     <!-- VISTA DEL MENÚ GENERAL -->
@@ -164,7 +162,7 @@
     </section>
 
     <!-- 3. APARTADO: SOBRES "ABRE CUANDO..." -->
-    
+    <section id="sec-sobres" class="view">
       <h2 class="section-title">Abre Cuando... 💌</h2>
       <p class="section-sub">Toca un sobre para leer lo que guardé para ti</p>
 
@@ -189,7 +187,7 @@
           <h4>...sea tu cumpleaños</h4>
         </div>
       </div>
-
+    </section>
 
     <!-- 4. APARTADO: RULETA DE CITAS -->
     <section id="sec-ruleta" class="view">
