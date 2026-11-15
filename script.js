@@ -49,7 +49,6 @@ const Snd = (() => {
     paper() { noise(.18, 'highpass', 2500, 5000, .2); noise(.1, 'highpass', 4000, 7000, .12, .12); },
     tick() { tone(1300, .05, 'square', .04); },
     chime() { tone(1175, .25, 'triangle', .1); tone(1568, .35, 'sine', .07, .08); },
-    catchH(n) { tone(660 + n * 25, .18, 'triangle', .1); },
     fanfare() { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, .55, 'triangle', .12, i * .12)); tone(2093, 1.2, 'sine', .05, .6); },
     key() { tone(1700 + Math.random() * 500, .03, 'square', .018); }
   };
@@ -245,50 +244,7 @@ function spinWheel() {
 }
 
 // =========================================
-// 6. ATRAPA CORAZONES
-// =========================================
-let gameLoopId, score = 0, basketX = 130, hearts = [];
-function startHeartGame() {
-  Snd.init(); cancelAnimationFrame(gameLoopId);
-  score = 0; hearts = [];
-  $('#game-score').innerText = score; $('#game-win').classList.add('hidden');
-  const canvas = $('#game-canvas'), ctx = canvas.getContext('2d');
-  const moveBasket = cx => {
-    const r = canvas.getBoundingClientRect(), k = canvas.width / r.width;
-    basketX = Math.max(0, Math.min(canvas.width - 60, (cx - r.left) * k - 30));
-  };
-  canvas.ontouchmove = e => { e.preventDefault(); moveBasket(e.touches[0].clientX); };
-  canvas.ontouchstart = e => { e.preventDefault(); moveBasket(e.touches[0].clientX); };
-  canvas.onmousemove = e => moveBasket(e.clientX);
-
-  let frame = 0;
-  function update() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); frame++;
-    if (frame % 32 === 0) hearts.push({ x: Math.random() * (canvas.width - 24), y: -20, speed: 2.5 + Math.random() * 2 });
-    ctx.fillStyle = "#ff6b9d"; ctx.shadowColor = '#ff6b9d'; ctx.shadowBlur = 14; ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(basketX, canvas.height - 35, 60, 18, 9); else ctx.rect(basketX, canvas.height - 35, 60, 18);
-    ctx.fill(); ctx.shadowBlur = 0;
-    ctx.font = "22px serif";
-    for (let i = hearts.length - 1; i >= 0; i--) {
-      const h = hearts[i]; h.y += h.speed; ctx.fillText("💖", h.x, h.y);
-      if (h.y > canvas.height - 45 && h.x > basketX - 15 && h.x < basketX + 55) {
-        hearts.splice(i, 1); score++; Snd.catchH(score);
-        $('#game-score').innerText = score;
-        if (G && !reduce) G.fromTo('#game-score', { scale: 1.8 }, { scale: 1, duration: .3, ease: 'back.out(3)' });
-        if (score >= 15) {
-          const w = $('#game-win'); w.classList.remove('hidden');
-          if (G && !reduce) G.from(w, { scale: .6, opacity: 0, duration: .6, ease: 'elastic.out(1,.5)' });
-          Snd.fanfare(); launchConfetti(); return;
-        }
-      } else if (h.y > canvas.height + 20) hearts.splice(i, 1);
-    }
-    gameLoopId = requestAnimationFrame(update);
-  }
-  update();
-}
-
-// =========================================
-// 7. CARTA CON MÁQUINA DE ESCRIBIR
+// 6. CARTA CON MÁQUINA DE ESCRIBIR
 // =========================================
 const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí dianitaaa ademas porque soy de sistemas jsjs.
 

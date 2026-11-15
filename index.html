@@ -8,8 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Librería ligera de Confeti -->
-   
+  <!-- Librerías de animación y confeti -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="style.css" />
@@ -56,7 +55,10 @@
     <header class="top-bar">
       <button id="back-btn" class="btn-back hidden" onclick="showMenu()">← Menú</button>
       <span class="brand-title">Para Dianitaaaaa ✨</span>
-      <div class="top-actions"><button id="mute-btn" class="btn-confetti" onclick="Snd.toggle()" aria-label="Silenciar o activar sonido">🔊</button><button class="btn-confetti" onclick="launchConfetti()" title="Más confeti">🎉</button></div>
+      <div class="top-actions">
+        <button id="mute-btn" class="btn-confetti" onclick="Snd.toggle()" aria-label="Silenciar o activar sonido">🔊</button>
+        <button class="btn-confetti" onclick="launchConfetti()" title="Más confeti">🎉</button>
+      </div>
     </header>
 
     <!-- VISTA DEL MENÚ GENERAL -->
@@ -91,12 +93,6 @@
           <p>Giralaaaa</p>
         </div>
 
-        <div class="menu-card" onclick="openSection('juego')">
-          <div class="card-icon">💖</div>
-          <h3>Atrapa Corazones</h3>
-          <p>Un minijuego dianita</p>
-        </div>
-
         <div class="menu-card highlight-card" onclick="openSection('carta')">
           <div class="card-icon">✨</div>
           <h3>Carta de Cumple</h3>
@@ -111,11 +107,9 @@
       <p class="section-sub">Toca cualquier tarjeta para ver el recuerdo detrás</p>
 
       <div class="polaroid-grid">
-        <!-- Ejemplo Foto 1 (Cambia src="assets/foto1.jpg" por tu foto real) -->
         <div class="polaroid" onclick="this.classList.toggle('flipped')">
           <div class="polaroid-inner">
             <div class="polaroid-front">
-              <!-- Cuando tengas tu foto, borra el div de arriba y descomenta la línea de abajo: -->
               <img src="assets/foto1.jpeg" alt="Recuerdo 1"> 
               <p class="caption">Un día increíble ✨</p>
             </div>
@@ -126,7 +120,6 @@
           </div>
         </div>
 
-        <!-- Ejemplo Video 1 -->
         <div class="video-card">
           <h4>Video especial 🎬</h4>
           <div class="media-placeholder">Aquí va tu Video<br><small>(assets/video1.mp4)</small></div>
@@ -204,22 +197,7 @@
       <div id="wheel-result" class="result-box hidden"></div>
     </section>
 
-    <!-- 5. APARTADO: MINIJUEGO ATRAPA CORAZONES -->
-    <section id="sec-juego" class="view">
-      <h2 class="section-title">Atrapa Corazones 💖</h2>
-      <p class="section-sub">Atrapa 15 corazones moviendo la canasta para ganar un vale</p>
-
-      <div class="game-hud">
-        <span>Puntos: <strong id="game-score">0</strong> / 15</span>
-        <button class="btn-small" onclick="startHeartGame()">Iniciar / Reiniciar</button>
-      </div>
-      <canvas id="game-canvas" width="320" height="400"></canvas>
-      <div id="game-win" class="result-box hidden">
-        🎉 ¡Ganaste! Desbloqueaste un <strong>Vale por tu postre o bebida favorita</strong>. ¡Tómale captura y cóbralo!
-      </div>
-    </section>
-
-    <!-- 6. APARTADO: CARTA FINAL -->
+    <!-- 5. APARTADO: CARTA FINAL -->
     <section id="sec-carta" class="view">
       <div class="letter-paper">
         <h2>Para ti, Dianita ✨</h2>
