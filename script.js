@@ -4,47 +4,95 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width:700px)').matches || 'ontouchstart' in window;
 
 // =========================================
-// 0. MOTOR DE SONIDO (Web Audio API, sin archivos)
+// 0. MOTOR DE SONIDO Y MÚSICA DE FONDO
 // =========================================
 const Snd = (() => {
   let ctx, master, nbuf, muted = false;
   try { muted = localStorage.getItem('muted') === '1'; } catch (e) {}
+
+  const bgm = () => $('#bg-music');
+
+  function syncMusic() {
+    const a = bgm();
+    if (!a) return;
+    a.volume = 0.30;
+    a.muted = muted;
+  }
+
+  function playMusic() {
+    const a = bgm();
+    if (!a) return;
+    syncMusic();
+    if (!muted && a.paused) {
+      a.play().catch(() => {});
+    }
+  }
+
   function init() {
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
-      ctx = new AC(); master = ctx.createGain(); master.gain.value = muted ? 0 : 0.6; master.connect(ctx.destination);
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = muted ? 0 : 0.6;
+      master.connect(ctx.destination);
       nbuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
-      const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const d = nbuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
     if (ctx.state === 'suspended') ctx.resume();
+    syncMusic();
   }
+
   function tone(f, d = .3, type = 'sine', v = .2, t = 0, to) {
     if (!ctx) return;
     const o = ctx.createOscillator(), g = ctx.createGain(), n = ctx.currentTime + t;
     o.type = type; o.frequency.setValueAtTime(f, n);
     if (to) o.frequency.exponentialRampToValueAtTime(to, n + d);
-    g.gain.setValueAtTime(.0001, n); g.gain.exponentialRampToValueAtTime(v, n + .015); g.gain.exponentialRampToValueAtTime(.0001, n + d);
+    g.gain.setValueAtTime(.0001, n);
+    g.gain.exponentialRampToValueAtTime(v, n + .015);
+    g.gain.exponentialRampToValueAtTime(.0001, n + d);
     o.connect(g).connect(master); o.start(n); o.stop(n + d + .05);
   }
+
   function noise(d, type, f0, f1, v, t = 0) {
     if (!ctx) return;
     const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain(), n = ctx.currentTime + t;
     s.buffer = nbuf; f.type = type; f.frequency.setValueAtTime(f0, n); f.frequency.exponentialRampToValueAtTime(f1, n + d);
-    g.gain.setValueAtTime(.0001, n); g.gain.exponentialRampToValueAtTime(v, n + d * .3); g.gain.exponentialRampToValueAtTime(.0001, n + d);
+    g.gain.setValueAtTime(.0001, n);
+    g.gain.exponentialRampToValueAtTime(v, n + d * .3);
+    g.gain.exponentialRampToValueAtTime(.0001, n + d);
     s.connect(f).connect(g).connect(master); s.start(n); s.stop(n + d + .05);
   }
-  const ui = () => { const b = $('#mute-btn'); if (b) b.textContent = muted ? '🔇' : '🔊'; };
+
+  const ui = () => {
+    const b = $('#mute-btn');
+    if (b) b.textContent = muted ? '🔇' : '🔊';
+  };
+
   return {
     init,
+    playMusic,
     toggle() {
-      init(); muted = !muted;
+      init();
+      muted = !muted;
       if (master) master.gain.setTargetAtTime(muted ? 0 : .6, ctx.currentTime, .05);
+      syncMusic();
+      const a = bgm();
+      if (a) {
+        if (muted) a.pause();
+        else a.play().catch(() => {});
+      }
       try { localStorage.setItem('muted', muted ? '1' : '0'); } catch (e) {}
-      ui(); if (!muted) this.chime();
+      ui();
+      if (!muted) this.chime();
     },
     ui,
-    heart() { tone(70, .35, 'sine', .5, 0, 45); tone(70, .35, 'sine', .45, .22, 45); [880, 1318, 1760, 2093].forEach((f, i) => tone(f, .9, 'sine', .08, .35 + i * .09)); },
+    heart() {
+      tone(70, .35, 'sine', .5, 0, 45);
+      tone(70, .35, 'sine', .45, .22, 45);
+      [880, 1318, 1760, 2093].forEach((f, i) => tone(f, .9, 'sine', .08, .35 + i * .09));
+    },
     whoosh() { noise(.45, 'bandpass', 300, 2400, .25); },
     paper() { noise(.18, 'highpass', 2500, 5000, .2); noise(.1, 'highpass', 4000, 7000, .12, .12); },
     tick() { tone(1300, .05, 'square', .04); },
@@ -53,9 +101,24 @@ const Snd = (() => {
     key() { tone(1700 + Math.random() * 500, .03, 'square', .018); }
   };
 })();
+
 ['pointerdown', 'touchstart', 'keydown'].forEach(e => document.addEventListener(e, Snd.init, { passive: true }));
 Snd.ui();
 document.addEventListener('click', e => { if (e.target.closest('.polaroid')) Snd.paper(); });
+
+// Pausar música automáticamente si se reproduce algún video local
+document.addEventListener('play', e => {
+  if (e.target.tagName === 'VIDEO') {
+    const a = $('#bg-music');
+    if (a && !a.paused) a.pause();
+  }
+}, true);
+
+['pause', 'ended'].forEach(ev => {
+  document.addEventListener(ev, e => {
+    if (e.target.tagName === 'VIDEO') Snd.playMusic();
+  }, true);
+});
 
 // =========================================
 // 1. CORAZÓN ASCII 3D DE NUBE DENSA + ESPIRALES DE LUZ
@@ -310,7 +373,10 @@ function launchConfetti() {
 let entered = false;
 function enterGift() {
   if (entered) return; entered = true;
-  Snd.init(); Snd.heart(); launchConfetti();
+  Snd.init();
+  Snd.heart();
+  Snd.playMusic();
+  launchConfetti();
   const welcome = $('#welcome-screen'), app = $('#main-app');
   const done = () => {
     welcome.classList.add('hidden');
@@ -363,7 +429,7 @@ if (G && !mobile && !reduce) {
 
 // =========================================
 // 4. MODAL "ABRE CUANDO..."
-// =========================================
+// =======================================
 function openLetterModal(title, text) {
   Snd.paper();
   $('#modal-title').innerText = title; $('#modal-body').innerText = text;
