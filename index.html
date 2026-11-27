@@ -35,9 +35,9 @@
     </div>
 
     <div class="bottom-cta">
-      <h1>¡Feliz Cumpleaños, Dianita!</h1>
-      <p>Hecho línea por línea para ti. Desliza para girarlo ✨</p>
-      <button class="btn-enter" onclick="enterGift()">[ Abrir mi regalo 💖 ]</button>
+      <h1>¡Feliz Cumpleaños, Dianitaaaa!</h1>
+      <p>Hecho solo para ti . Desliza para girarloop ✨</p>
+      <button class="btn-enter" onclick="enterGift()">[ Abrir mi regalitoo 💖 ]</button>
     </div>
   </section>
 
@@ -138,7 +138,7 @@
               <p class="caption">Te acuerdas? jsjsj</p>
             </div>
             <div class="polaroid-back">
-              <h4>Fecha 3</h4>
+              
               <p>Fue el gran diaaa jaja, muy intenso</p>
             </div>
           </div>
@@ -186,10 +186,52 @@
           </div>
         </div>
 
+        <!-- FOTO 7 -->
+        <div class="polaroid" onclick="this.classList.toggle('flipped')">
+          <div class="polaroid-inner">
+            <div class="polaroid-front">
+              <img src="assets/foto7.jpeg" alt="Recuerdo 7"> 
+              <p class="caption">Momentito 7 ✨</p>
+            </div>
+            <div class="polaroid-back">
+              
+              <p>Escribe aquí tu recuerdo de la foto 7...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOTO 8 -->
+        <div class="polaroid" onclick="this.classList.toggle('flipped')">
+          <div class="polaroid-inner">
+            <div class="polaroid-front">
+              <img src="assets/foto8.jpeg" alt="Recuerdo 8"> 
+              <p class="caption">Momentito 8 💖</p>
+            </div>
+            <div class="polaroid-back">
+              
+              <p>Escribe aquí tu recuerdo de la foto 8...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOTO 9 -->
+        <div class="polaroid" onclick="this.classList.toggle('flipped')">
+          <div class="polaroid-inner">
+            <div class="polaroid-front">
+              <img src="assets/foto9.jpeg" alt="Recuerdo 9"> 
+              <p class="caption">Momentito 9 🌟</p>
+            </div>
+            <div class="polaroid-back">
+              
+              <p>Escribe aquí tu recuerdo de la foto 9...</p>
+            </div>
+          </div>
+        </div>
+
         <!-- VIDEO -->
-        <div class="video-card">
+        <div class="video-card" style="grid-column: 1 / -1;">
           <h4>Video especial 🎬</h4>
-          <div class="media-placeholder">Aquí va tu Video<br><small>(<video controls playsinline src="assets/video1.mp4"></video></small></div>
+          <video controls playsinline src="assets/video1.mp4" style="width: 100%; max-height: 420px; border-radius: 12px; object-fit: contain; display: block; margin: 10px auto; background: #000;"></video>
           <p class="caption">Que miedo me dio jsjs</p>
         </div>
       </div>
@@ -273,7 +315,7 @@
 
   </main>
 
-  <!-- MODAL PARA LEER LOS SOBRES -->
+
   <div id="letter-modal" class="modal hidden" onclick="closeLetterModal(event)">
     <div class="modal-content">
       <button class="close-modal" onclick="document.getElementById('letter-modal').classList.add('hidden')">✕</button>
