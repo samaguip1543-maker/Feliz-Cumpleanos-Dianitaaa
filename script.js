@@ -499,8 +499,7 @@ function spinWheel() {
 // =========================================
 const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí dianitaaa, ademas porque soy de sistemas pense en estoo.
 
-Queria decirte que cada momento contigo desde las pláticas largas hasta nuestras salidas a comer muy improvisadas, se ha vuelto de mis partes favoritas de la semana y sobre todo, del semestre. Admiro muchísimo tu forma de ser de vdd, tu alegría y lo linda persona que eres, Dianita, me encanta como eres muy empatica con los animales
-, eso me hace mucho ver como eres tu, y me encanta, yo se que eres una persona muy especial y que vas a lograr todo lo que te propongas, porque eres muy inteligente y capaz, y sobre todo, porque eres una persona muy linda por dentro y por fuera.
+Queria decirte que cada momento contigo desde las pláticas largas hasta nuestras salidas a comer muy improvisadas, se ha vuelto de mis partes favoritas de la semana y sobre todo, del semestre. Admiro muchísimo tu forma de ser de vdd, tu alegría y lo linda persona que eres, Dianita, me encanta como eres muy empatica con los animales, eso me hace mucho ver como eres tu, y me encanta, yo se que eres una persona muy especial y que vas a lograr todo lo que te propongas, porque eres muy inteligente y capaz, y sobre todo, porque eres una persona muy linda por dentro y por fuera.
 Se que este año ha sido un poco dificil para nosotros, pero quiero que sepas que siempre voy a estar para apoyarte en todo lo que necesites y que siempre voy a estar para hacerte sonreir y hacerte sentir especial.
 y si algun dia te sientes triste o desanimada, quiero que sepas que siempre voy a estar para escucharte y para hacerte sentir mejor.
 Grabate que siempre voy a estar para ti, y que siempre voy a hacer todo lo posible para hacerte feliz.
