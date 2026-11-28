@@ -515,7 +515,6 @@ Espero que hoy la pases increíble, que te consientan mucho y que este nuevo añ
 
 ¡Feliz cumpleaños, Dianita! 💖 TE AMO
 
-
 Att : Tu amorcito bello <3 samy`;
 
 let typedStarted = false;
