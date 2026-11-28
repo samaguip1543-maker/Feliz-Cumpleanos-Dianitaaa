@@ -495,13 +495,23 @@ function spinWheel() {
 }
 
 // =========================================
-// 6. CARTA CON MÁQUINA DE ESCRIBIR
+// 6. CARTA CON MÁQUINA DE ESCRIBIR para mi amor bello
 // =========================================
-const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí dianitaaa ademas porque soy de sistemas jsjs.
+const birthdayLetter = `Hoy quería hacer algo diferente para recordarte lo especial que eres para mí dianitaaa, ademas porque soy de sistemas pense en estoo.
 
-Queria decirte que cada momento contigo —desde las pláticas largas hasta nuestras salidas a comer muy improvisadas— se ha vuelto de mis partes favoritas de la semana y sobre todo, del semestre. Admiro muchísimo tu forma de ser, tu alegría y lo linda persona que eres, Dianita.
+Queria decirte que cada momento contigo desde las pláticas largas hasta nuestras salidas a comer muy improvisadas, se ha vuelto de mis partes favoritas de la semana y sobre todo, del semestre. Admiro muchísimo tu forma de ser de vdd, tu alegría y lo linda persona que eres, Dianita, me encanta como empatica con los animals
+yo se que eres una persona muy especial y que vas a lograr todo lo que te propongas, porque eres muy inteligente y trabajadora, y sobre todo, porque eres una persona muy linda por dentro y por fuera.
+Se que este año ha sido un poco dificil para nosotros, pero quiero que sepas que siempre voy a estar para apoyarte en todo lo que necesites y que siempre voy a estar para hacerte sonreir y hacerte sentir especial.
+y si algun dia te sientes triste o desanimada, quiero que sepas que siempre voy a estar para escucharte y para hacerte sentir mejor.
+Grabate que siempre voy a estar para ti, y que siempre voy a hacer todo lo posible para hacerte feliz.
 
-Espero que hoy la pases increíble, que te consientan mucho y que este nuevo año esté lleno de cosas bonitas para ti, tambien para nosotros.
+Te quiero mucho Dianita, y espero que este nuevo año de vida que comienzas hoy, este lleno de cosas bonitas para ti y para nosotros ojala siempre me sigas eligiendo me
+y perdoname por tantas faltas que he tenido contigo, pero vdd que me esfuerzo por ser mejor para ti y para nosotros.
+Espero que todo lo que ha pasado no te haga olvidar lo mucho que te amo y lo mucho que te valoro, y que siempre voy a estar para ti en las buenas y en las malas.
+
+
+
+Espero que hoy la pases increíble, que te consientan mucho y que este nuevo año esté lleno de cosas bonitas para ti, y tambien para nosotros.
 
 ¡Feliz cumpleaños, Dianita! 💖`;
 
